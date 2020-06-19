@@ -14,12 +14,13 @@ class PlantController {
     }
   }
 
-  static Future<Plants> getPlants() async {
+  static Future<PlantList> getPlants() async {
     final response = await http.get(Variables.API_URL + 'plants/allInfo');
     if (response.statusCode == 200) {
-      return Plants.fromJson(json.decode(response.body));
+      PlantList plantList = PlantList.fromJson(json.decode(response.body));
+      return plantList;
     } else {
-      throw Exception('Failed to get plant with id:3');
+      throw Exception('Failed to get plants');
     }
   }
 

@@ -6,9 +6,7 @@ class Water{
   final int intensity;
   final String lastActivity;
   final Spray spray;
-  Water({this.id, this.frequency, this.intensity, this.lastActivity, this.spray}){
-
-  }
+  Water({this.id, this.frequency, this.intensity, this.lastActivity, this.spray});
 
   factory Water.fromJson(Map<String, dynamic> json) {
     return Water(
@@ -16,7 +14,8 @@ class Water{
         frequency: json['frequency'],
         intensity: json['intensity'],
         lastActivity: json['lastActivity'],
-        spray: Spray.fromJson(json['spray'])
+        spray: null
+//        todo rozwiazac problem spraya
     );
   }
 }

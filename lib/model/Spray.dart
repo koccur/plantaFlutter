@@ -4,7 +4,7 @@ class Spray{
   final int intensity;
   final String lastActivity;
 
-  Spray({this.id, this.frequency, this.intensity, this.lastActivity}) {}
+  Spray({this.id, this.frequency, this.intensity, this.lastActivity});
 
   factory Spray.fromJson(Map<String, dynamic> json) {
     return Spray(

@@ -13,12 +13,12 @@ class Plant {
 
   Plant(
       {this.id,
-        this.name,
-        this.picture,
+      this.name,
+      this.picture,
       this.water,
-        this.fertilization,
-        this.place,
-        this.notes}) {}
+      this.fertilization,
+      this.place,
+      this.notes});
 
   factory Plant.fromJson(Map<String, dynamic> json) {
     return Plant(
@@ -30,25 +30,18 @@ class Plant {
         place: Place.fromJson(json['place']),
         notes: json['notes']);
   }
-//  factory Plant.fromJsonPlants(List<Map<String,dynamic>> json){
-//    List list = new List();
-//    for(int i = 0;i<json.length;i++){
-//      list.add(Plant.fromJson(json[i]));
-//    }
-//
-//     return list;
-//  }
 }
-
-class Plants{
+class PlantList{
   final List<Plant> plants;
-  Plants({this.plants}){
 
+  PlantList({this.plants});
+
+  factory PlantList.fromJson(List<dynamic> parsedJson){
+
+    List<Plant> plants = new List<Plant>();
+    plants  = parsedJson.map((el)=>Plant.fromJson(el)).toList();
+
+    return new PlantList(plants: plants);
   }
 
-  factory Plants.fromJson(Map<String,dynamic> json){
-    return Plants(
-      plants: json['plants']
-    );
-  }
 }

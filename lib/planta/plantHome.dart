@@ -7,16 +7,13 @@ import 'dart:convert';
 
 import 'package:planta_flutter/planta/plantAdd.dart';
 
-
-
 class PlantHome extends StatefulWidget {
-
   @override
   _PlantHome createState() => _PlantHome();
 }
 
 class _PlantHome extends State<PlantHome> {
-  Future<Plants> futurePlants;
+  Future<PlantList> futurePlants;
   Future<Plant> futurePlant;
 
   List<Widget> iconsAppBarFunc(context) {
@@ -38,7 +35,7 @@ class _PlantHome extends State<PlantHome> {
         child: SvgPicture.asset('images/icons/plant-temp.svg'));
   }
 
-  Widget rightSideBoxFunc(context,Plant plant) {
+  Widget rightSideBoxFunc(context, Plant plant) {
     return Container(
         height: 130,
         width: 130,
@@ -47,8 +44,7 @@ class _PlantHome extends State<PlantHome> {
         padding: EdgeInsets.all(12),
         child: Column(
           children: <Widget>[
-            Expanded(
-                child: (Text(plant.name, textAlign: TextAlign.left))),
+            Expanded(child: (Text(plant.name, textAlign: TextAlign.left))),
             Expanded(
               child: Row(
                 children: <Widget>[
@@ -89,18 +85,18 @@ class _PlantHome extends State<PlantHome> {
         ));
   }
 
-  Widget plantBoxFunc(context,Plant plant) {
+  Widget plantBoxFunc(context, Plant plant) {
     return Row(
       children: <Widget>[
         Expanded(child: leftSideBoxFunc(context)),
-        Expanded(child: rightSideBoxFunc(context,plant))
+        Expanded(child: rightSideBoxFunc(context, plant))
       ],
     );
   }
 
-  RaisedButton plantButtonFunc(context,Plant plant) {
+  RaisedButton plantButtonFunc(context, Plant plant) {
     return RaisedButton(
-      child: plantBoxFunc(context,plant),
+      child: plantBoxFunc(context, plant),
       padding: EdgeInsets.all(10),
     );
   }
@@ -116,9 +112,26 @@ class _PlantHome extends State<PlantHome> {
       alignment: Alignment.topCenter,
       child: Column(
         children: <Widget>[
-          plantButtonFunc(context,plant),
+          plantButtonFunc(context, plant),
           SizedBox(height: 20),
         ],
+      ),
+      padding: const EdgeInsets.all(10),
+      decoration: new BoxDecoration(
+        color: Colors.red,
+      ),
+    );
+  }
+
+  Widget plantsListFunc(context, PlantList plantList) {
+    return Container(
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 64),
+      alignment: Alignment.topCenter,
+      child: ListView.builder(
+        itemCount: plantList.plants.length,
+        itemBuilder: (context,index){
+          return plantListFunc(context, plantList.plants[index]);
+        },
       ),
       padding: const EdgeInsets.all(10),
       decoration: new BoxDecoration(
@@ -130,8 +143,8 @@ class _PlantHome extends State<PlantHome> {
   @override
   void initState() {
     super.initState();
-//    futurePlants = PlantController.getPlants();
-    futurePlant = PlantController.getPlant(3);
+    futurePlants = PlantController.getPlants();
+    futurePlant = PlantController.getPlant(1);
   }
 
   @override
@@ -140,29 +153,30 @@ class _PlantHome extends State<PlantHome> {
       title: 'Plantmagedon',
       theme: ThemeData(primaryColor: AppColors.ThemeColor),
       home: Scaffold(
-          appBar: appBarFunc(context),
-          body: Container(
-            alignment: Alignment.center,
-            child: FutureBuilder<Plant>(
-              future: futurePlant,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return plantListFunc(context, snapshot.data);
-                } else {
-                  return Text("Problem z danymi");
-                }
-              },
-            ),
+        appBar: appBarFunc(context),
+        body: Container(
+          alignment: Alignment.center,
+          child: FutureBuilder<PlantList>(
+            future: futurePlants,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return plantsListFunc(context, snapshot.data);
+              } else if (snapshot.hasError) {
+                return Text("Problem z danymi2");
+              }
+              return CircularProgressIndicator();
+            },
           ),
+        ),
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
-              Navigator.push(context,MaterialPageRoute(builder: (context) => AddPlantRoute()));
-           },
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddPlantRoute()));
+          },
           child: Icon(Icons.add),
           backgroundColor: AppColors.ThemeColor,
-        ),),
+        ),
+      ),
     );
   }
 }
-
-
