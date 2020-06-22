@@ -18,4 +18,12 @@ class Water{
 //        todo rozwiazac problem spraya
     );
   }
+
+  Map<String,dynamic> toJson()=>{
+    "id":id,
+    "frequency":frequency,
+    "intensity":intensity,
+    "lastActivity":lastActivity,
+    "spray":spray
+  };
 }

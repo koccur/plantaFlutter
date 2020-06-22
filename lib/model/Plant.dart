@@ -3,13 +3,13 @@ import 'Place.dart';
 import 'Water.dart';
 
 class Plant {
-  final int id;
-  final String name;
-  final String picture;
-  final Water water;
-  final Fertilization fertilization;
-  final Place place;
-  final String notes;
+  int id;
+  String name;
+  String picture;
+  Water water;
+  Fertilization fertilization;
+  Place place;
+  String notes;
 
   Plant(
       {this.id,
@@ -30,18 +30,27 @@ class Plant {
         place: Place.fromJson(json['place']),
         notes: json['notes']);
   }
+
+  Map<String, dynamic> toJson()=> {
+        "id": id,
+        "name": name,
+        "picture": picture,
+        "water": water,
+        "fertilization": fertilization,
+        "place": place,
+        "notes": notes
+      };
 }
-class PlantList{
+
+class PlantList {
   final List<Plant> plants;
 
   PlantList({this.plants});
 
-  factory PlantList.fromJson(List<dynamic> parsedJson){
-
+  factory PlantList.fromJson(List<dynamic> parsedJson) {
     List<Plant> plants = new List<Plant>();
-    plants  = parsedJson.map((el)=>Plant.fromJson(el)).toList();
+    plants = parsedJson.map((el) => Plant.fromJson(el)).toList();
 
     return new PlantList(plants: plants);
   }
-
 }

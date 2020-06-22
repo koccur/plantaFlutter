@@ -13,4 +13,11 @@ class Fertilization {
         intensity: json['intensity'],
         lastActivity: json['lastActivity']);
   }
+  Map<String, dynamic> toJson()=>
+      {
+        "id": id,
+        "frequency": frequency,
+        "intensity": intensity,
+        "lastActivity": lastActivity,
+      };
 }

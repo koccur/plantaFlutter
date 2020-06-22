@@ -24,15 +24,16 @@ class PlantController {
     }
   }
 
-  static Future<Plant> createPlant(Plant plantDTO) async {
+  static Future createPlant(Plant plantDTO) async {
     final http.Response response = await http.post(Variables.API_URL + 'plants',
         headers: <String, String>{
           'Content-type': 'application/json;charset=UTF-8'
         },
-        body: jsonEncode(<String, Plant>{'plant': plantDTO}));
+        body: jsonEncode(plantDTO)
+    );
 
     if (response.statusCode == 201) {
-      return Plant.fromJson(json.decode(response.body));
+      return true;
     } else {
       throw Exception('Failed to create Plant');
     }

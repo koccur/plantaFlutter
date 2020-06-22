@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:planta_flutter/controllers/Plant.controller.dart';
+import 'package:planta_flutter/model/Fertilization.dart';
+import 'package:planta_flutter/model/Place.dart';
+import 'package:planta_flutter/model/Plant.dart';
+import 'package:planta_flutter/model/Water.dart';
 
 import '../colors.dart';
 
@@ -13,6 +18,14 @@ class _AddPlantRoute extends State<AddPlantRoute> {
   bool checkboxSprayValue = false;
   bool checkboxFertValue = false;
   final _formKey = GlobalKey<FormState>();
+  Plant plant = new Plant(
+      id: null,
+      water: new Water(),
+      place: new Place(),
+      picture: null,
+      notes: null,
+      fertilization: new Fertilization(),
+      name: null);
 
   Widget addPlantBarFunc(context) {
     return AppBar(
@@ -26,10 +39,31 @@ class _AddPlantRoute extends State<AddPlantRoute> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () {
-//            save
+            onPressed: () async{
+            await PlantController.createPlant(Plant(
+                                  id: null,
+                                  fertilization: Fertilization(
+                                    lastActivity: '1',
+                                    intensity: 1,
+                                    frequency: 1
+                                  ),
+                                  name: plant.name,
+                                  notes: plant.notes,
+                                  picture: null,
+                                  place: Place(
+                                      sunnyLevel: plant.place.sunnyLevel,
+                                      roomName: plant.place.roomName),
+                                  water: Water(
+                                    spray: null,
+                                    frequency: 1,
+                                    intensity: 1,
+                                    lastActivity: '1',
+                                  )
+                              )).whenComplete(() => Navigator.pop(context))
+                .whenComplete(() => PlantController.getPlants());
+//            todo: dodac odswiezanie listy po dodaniu elementu
             },
-          )
+          ),
         ]);
   }
 
@@ -94,23 +128,27 @@ class _AddPlantRoute extends State<AddPlantRoute> {
       child: Column(
         children: <Widget>[
           TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return "write text";
-              }
-              return null;
-            },
-            decoration: InputDecoration(labelText: "Nasłonecznienie"),
-          ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "write text";
+                }
+                return null;
+              },
+              decoration: InputDecoration(labelText: "Nasłonecznienie"),
+              onChanged: (String value) {
+                plant.place.sunnyLevel = 1;
+              }),
           TextFormField(
-            validator: (value) {
-              if (value.isEmpty) {
-                return "write text";
-              }
-              return null;
-            },
-            decoration: InputDecoration(labelText: "Lokalizacja"),
-          )
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "write text";
+                }
+                return null;
+              },
+              decoration: InputDecoration(labelText: "Lokalizacja"),
+              onChanged: (String value) {
+                plant.place.roomName = value;
+              })
         ],
       ),
     );
@@ -128,25 +166,22 @@ class _AddPlantRoute extends State<AddPlantRoute> {
                 child: Column(
                   children: <Widget>[
                     leftSideBoxFunc(context),
-                    Text("Nazwa rośliny"),
+                    TextFormField(
+                        decoration: InputDecoration(labelText: "Nazwa rośliny"),
+                        onChanged: (String value) {
+                          plant.name = value;
+                        }),
                     checkboxContainer(context),
                     sunnyAndLocContainer(context),
                     TextFormField(
-                      decoration: InputDecoration(labelText: "Notatki"),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        child: RaisedButton(
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                // If the form is valid, display a Snackbar.
-                                Scaffold.of(context).showSnackBar(
-                                    SnackBar(content: Text('Processing Data')));
-                              }
-                            },
-                            child: Text('Submit')))
+                        decoration: InputDecoration(labelText: "Notatki"),
+                        onChanged: (String value) {
+                          plant.notes = value;
+                        }),
                   ],
-                ))));
+                )),
+
+        ));
   }
 }
 

@@ -108,7 +108,7 @@ class _PlantHome extends State<PlantHome> {
 
   Widget plantListFunc(context, Plant plant) {
     return Container(
-      margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 64),
+      margin: const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 0),
       alignment: Alignment.topCenter,
       child: Column(
         children: <Widget>[
@@ -125,7 +125,7 @@ class _PlantHome extends State<PlantHome> {
 
   Widget plantsListFunc(context, PlantList plantList) {
     return Container(
-      margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 64),
+      margin: const EdgeInsets.only(top: 0, left: 20, right: 20, bottom: 0),
       alignment: Alignment.topCenter,
       child: ListView.builder(
         itemCount: plantList.plants.length,

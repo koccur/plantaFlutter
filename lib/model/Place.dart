@@ -1,7 +1,7 @@
 class Place {
-  final int id;
-  final int sunnyLevel;
-  final String roomName;
+  int id;
+  int sunnyLevel;
+  String roomName;
 
   Place({this.id, this.roomName, this.sunnyLevel}) {}
 
@@ -11,4 +11,10 @@ class Place {
         roomName: json['roomName'],
         sunnyLevel: json['sunnyLevel']);
   }
+
+  Map<String,dynamic> toJson()=>{
+    "id":id,
+    "sunnyLevel":sunnyLevel,
+    "roomName":"roomName"
+  };
 }
