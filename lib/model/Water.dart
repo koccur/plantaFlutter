@@ -1,11 +1,11 @@
 import 'Spray.dart';
 
 class Water{
-  final int id;
-  final int frequency;
-  final int intensity;
-  final String lastActivity;
-  final Spray spray;
+  int id;
+  int frequency;
+  int intensity;
+  String lastActivity;
+  Spray spray;
   Water({this.id, this.frequency, this.intensity, this.lastActivity, this.spray});
 
   factory Water.fromJson(Map<String, dynamic> json) {

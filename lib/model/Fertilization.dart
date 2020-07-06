@@ -1,8 +1,8 @@
 class Fertilization {
   final int id;
-  final int frequency;
-  final int intensity;
-  final String lastActivity;
+  int frequency;
+  int intensity;
+  String lastActivity;
 
   Fertilization({this.id, this.frequency, this.intensity, this.lastActivity}) {}
 

@@ -4,4 +4,6 @@
 import 'package:flutter/material.dart';
 import 'package:planta_flutter/planta/plantHome.dart';
 
+import 'planta/plantAdd.dart';
+
 void main() => runApp(MaterialApp(home: PlantHome()));

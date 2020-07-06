@@ -3,7 +3,7 @@ import 'package:planta_flutter/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:planta_flutter/controllers/Plant.controller.dart';
 import 'package:planta_flutter/model/Plant.dart';
-import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:planta_flutter/planta/plantAdd.dart';
 
@@ -54,7 +54,7 @@ class _PlantHome extends State<PlantHome> {
                     height: 20,
                   ),
                   SizedBox(width: 12),
-                  Text('15.10.2020'),
+                  Text(_getFormattedDate(plant.water.lastActivity)),
                 ],
               ),
             ),
@@ -67,7 +67,7 @@ class _PlantHome extends State<PlantHome> {
                     height: 20,
                   ),
                   SizedBox(width: 12),
-                  Text('15.10.2020')
+                  Text(getSprayLastActivation(plant))
                 ],
               ),
             ),
@@ -77,7 +77,7 @@ class _PlantHome extends State<PlantHome> {
                   SvgPicture.asset('images/icons/fertilization.svg',
                       width: 20, height: 20),
                   SizedBox(width: 12),
-                  Text('15.10.2020')
+                  Text(_getFormattedDate(plant.fertilization.lastActivity))
                 ],
               ),
             ),
@@ -85,13 +85,30 @@ class _PlantHome extends State<PlantHome> {
         ));
   }
 
+  String getSprayLastActivation(Plant plant) {
+    if (plant.water.spray != null) {
+      return _getFormattedDate(plant.water.spray.lastActivity);
+    }
+
+    return 'no Data'; //todo: translate
+  }
+
+  String _getFormattedDate(String date) {
+    if (date != null) {
+      var currDt = DateTime.parse(date);
+      var newFormat = DateFormat("yy-MM-dd");
+      String newDate = newFormat.format(currDt);
+      return newDate;
+    }
+    return 'no Data'; //todo: translate
+  }
+
   Widget plantBoxFunc(context, Plant plant) {
     return Row(
       children: <Widget>[
         Expanded(child: leftSideBoxFunc(context)),
         Expanded(child: rightSideBoxFunc(context, plant))
-      ],
-    );
+    ]);
   }
 
   RaisedButton plantButtonFunc(context, Plant plant) {
@@ -129,7 +146,7 @@ class _PlantHome extends State<PlantHome> {
       alignment: Alignment.topCenter,
       child: ListView.builder(
         itemCount: plantList.plants.length,
-        itemBuilder: (context,index){
+        itemBuilder: (context, index) {
           return plantListFunc(context, plantList.plants[index]);
         },
       ),
@@ -144,7 +161,6 @@ class _PlantHome extends State<PlantHome> {
   void initState() {
     super.initState();
     futurePlants = PlantController.getPlants();
-    futurePlant = PlantController.getPlant(1);
   }
 
   @override
