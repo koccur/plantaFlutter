@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planta_flutter/screens/auth/register.dart';
-import 'package:planta_flutter/screens/auth/signIn.dart';
+import 'package:planta_flutter/screens/auth/logIn.dart';
 
 class Auth extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _AuthState extends State<Auth> {
   @override
   Widget build(BuildContext context) {
     if (showSignIn) {
-      return SignIn(toggleView: toggleView);
+      return LogIn(toggleView: toggleView);
     } else {
       return Register(toggleView: toggleView);
     }

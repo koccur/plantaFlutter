@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planta_flutter/models/Plant_Alt.dart';
-import 'package:planta_flutter/screens/home/plant_list.dart';
+import 'package:planta_flutter/planta/plantHome.dart';
+import 'file:///C:/projects/planta_flutter/lib/shared/colors.dart';
 import 'package:planta_flutter/screens/home/settings_form.dart';
 import 'package:planta_flutter/services/auth.dart';
 import 'package:planta_flutter/services/database.dart';
@@ -25,23 +26,17 @@ class Home extends StatelessWidget {
     return StreamProvider<List<PlantALT>>.value(
         value: DatabaseService().plants,
         child: Scaffold(
-          backgroundColor: Colors.brown[50],
-          appBar: AppBar(
-            title: Text("Planta"),
-            backgroundColor: Colors.brown[400],
+          appBar: AppBar(title: Text("Plantmagedon"), backgroundColor: AppColors.ThemeColor,
             elevation: 0.0,
             actions: <Widget>[
               FlatButton.icon(
                   onPressed: () async {
                     await _authService.signOut();
-                  },
-                  icon: Icon(Icons.person),
-                  label: Text('Logout')),
-              FlatButton.icon(
-                  onPressed: () => _showSettingsPanel(), icon: Icon(Icons.settings), label: Text('settings'))
+                  }, label: Text('Logout'), icon: Icon(Icons.person)),
+              IconButton(onPressed: () {}, icon: Icon(Icons.calendar_today)),
+              IconButton(onPressed: () => _showSettingsPanel(), icon: Icon(Icons.settings)),
             ],
-          ),
-          body: PlantList(),
+          ), body: PlantHome(),
         ));
   }
 }

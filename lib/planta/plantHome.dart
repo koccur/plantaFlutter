@@ -2,10 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:planta_flutter/controllers/Plant.controller.dart';
-import 'package:planta_flutter/model/Plant.dart';
 import 'package:intl/intl.dart';
-import 'package:planta_flutter/colors.dart';
 import 'package:planta_flutter/models/Plant.dart';
+import 'package:planta_flutter/shared/colors.dart';
 
 class PlantHome extends StatefulWidget {
   @override
@@ -16,15 +15,9 @@ class _PlantHome extends State<PlantHome> {
   Future<PlantList> futurePlants;
   Future<Plant> futurePlant;
 
-  List<Widget> iconsAppBarFunc(context) {
-    return [
-      IconButton(icon: Icon(Icons.calendar_today), onPressed: null),
-      IconButton(icon: Icon(Icons.menu), onPressed: null)
-    ];
-  }
-
   Widget leftSideBoxFunc(context, Plant plant) {
-    return Container(padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.only(right: 4),
       width: 130.0,
       height: 130.0,
@@ -93,12 +86,7 @@ class _PlantHome extends State<PlantHome> {
 
   RaisedButton plantButtonFunc(context, Plant plant) {
     return RaisedButton(onPressed: () => Navigator.pushNamed(context, '/addPlant', arguments: plant),
-      child: plantBoxFunc(context, plant),
-      padding: EdgeInsets.all(10),);
-  }
-
-  Widget appBarFunc(context) {
-    return AppBar(title: Text('Plantmagedon'), actions: iconsAppBarFunc(context));
+      child: plantBoxFunc(context, plant), padding: EdgeInsets.all(10),);
   }
 
   Widget plantListFunc(context, Plant plant) {
@@ -149,15 +137,14 @@ class _PlantHome extends State<PlantHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: appBarFunc(context),
-      body: Container(alignment: Alignment.center,
-        child: FutureBuilder<PlantList>(future: futurePlants, builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return plantsListFunc(context, snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text("Problem z danymi2");
-          }
-          return CircularProgressIndicator();
-        },),),);
+    return Scaffold(body: Container(
+      alignment: Alignment.center, child: FutureBuilder<PlantList>(future: futurePlants, builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return plantsListFunc(context, snapshot.data);
+      } else if (snapshot.hasError) {
+        return Text("Problem z danymi2");
+      }
+      return CircularProgressIndicator();
+    },),),);
   }
 }
