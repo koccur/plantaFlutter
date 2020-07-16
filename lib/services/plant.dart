@@ -59,6 +59,10 @@ class PlantService {
     });
   }
 
+  Future deletePlant(String plantId) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return await reference.document(user.uid).collection('plants').document(plantId).delete();
+  }
 
   List<Plant> _plantListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {

@@ -278,6 +278,7 @@ class _AddPlantRoute extends State<AddPlantRoute> {
     await Navigator.pushNamed(context, '/takePhoto', arguments: _plant).whenComplete(() => refreshMock());
   }
 
+  // ignore: missing_return
   Widget refreshMock() {
     print("Refresh view");
 //    todo: fix it

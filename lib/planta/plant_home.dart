@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planta_flutter/models/Plant.dart';
+import 'package:planta_flutter/services/plant.dart';
 import 'package:planta_flutter/shared/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ class PlantHome2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final plants = Provider.of<List<Plant>>(context) ?? [];
+    final plantService = PlantService();
 
     String _getFormattedDate(String date) {
       if (date != null) {
@@ -47,6 +49,108 @@ class PlantHome2 extends StatelessWidget {
 //    }
 
       return 'no Data'; //todo: translate
+    }
+
+//                  todo move that to showDialogOption
+    void _showDeletePlantDialog(context, Plant plant) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Delete plant'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[Text('Are you sure that you want to delete this plant?')],
+                ),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Cancel'),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () => plantService.deletePlant(plant.uid).whenComplete(() => Navigator.of(context).pop()),
+                )
+              ],
+            );
+          });
+    }
+
+    void _showPlantActionDialog(context, Plant plant) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return SimpleDialog(
+              contentPadding: EdgeInsets.only(top: 0, bottom: 16),
+              children: <Widget>[
+                Container(
+                  child: Row(children: <Widget>[
+                    IconButton(
+                        icon: new Icon(Icons.edit, color: Colors.white),
+                        iconSize: 32.0,
+                        onPressed: () => Navigator.popAndPushNamed(context, '/addPlant', arguments: plant)),
+                    IconButton(
+                        icon: new Icon(Icons.delete, color: Colors.white),
+                        iconSize: 32.0,
+                        onPressed: () => _showDeletePlantDialog(context, plant)),
+                    IconButton(
+                      icon: new Icon(Icons.cancel, color: Colors.white),
+                      iconSize: 32.0,
+                      padding: EdgeInsets.only(left: 140),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ]),
+                  color: AppColors.ThemeColor,
+                  margin: EdgeInsets.only(bottom: 16),
+                ),
+                Text(
+                  plant.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: SvgPicture.asset('images/icons/water.svg', width: 20, height: 20),
+                    ),
+                    Text(plant.water.lastActivity),
+                    IconButton(
+                      icon: new Icon(
+                        Icons.check_box,
+                        color: Colors.white,
+                      ),
+                      onPressed: null,
+                    )
+                  ]),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(children: <Widget>[
+                    Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: SvgPicture.asset(
+                          'images/icons/fertilization.svg',
+                          width: 20,
+                          height: 20,
+                        )),
+                    Text(plant.fertilization.lastActivity),
+                    IconButton(
+                      icon: new Icon(
+                        Icons.check_box,
+                        color: Colors.white,
+                      ),
+                      onPressed: null,
+                    )
+                  ]),
+                ),
+              ],
+            );
+          });
     }
 
     Widget rightSideBoxFunc(context, Plant plant) {
@@ -106,8 +210,7 @@ class PlantHome2 extends StatelessWidget {
     }
 
     RaisedButton plantButtonFunc(context, Plant plant) {
-      return RaisedButton(
-        onPressed: () => Navigator.pushNamed(context, '/addPlant', arguments: plant),
+      return RaisedButton(onPressed: () => {print('xxx'), _showPlantActionDialog(context, plant)},
         child: plantBoxFunc(context, plant),
         padding: EdgeInsets.all(10),
       );
