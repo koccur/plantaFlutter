@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:planta_flutter/models/Plant.dart';
-import 'file:///C:/projects/planta_flutter/lib/shared/colors.dart';
+import 'package:planta_flutter/shared/colors.dart';
 
 class PlantCard extends StatelessWidget {
   final Plant plant;
@@ -19,11 +19,11 @@ class PlantCard extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(radius: 30, backgroundColor: AppColors.ThemeColor,
             child: SvgPicture.asset('images/icons/plant-temp.svg'),
-//            wyglada na coraz bardziej zdechła jak nie jest podlewana od paru dni
+//            todo: Should change view depends by watering
           ),
           title: Text(plant.name),
           subtitle: Text(plant.water.lastActivity),
-          //todo:wstawić podlewanko
+          //todo: add water
           onLongPress: () => _setPlantAsWatered(),
           trailing: Icon(Icons.settings),
           isThreeLine: true,

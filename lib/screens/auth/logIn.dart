@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/projects/planta_flutter/lib/shared/colors.dart';
 import 'package:planta_flutter/services/auth.dart';
+import 'package:planta_flutter/shared/colors.dart';
 import 'package:planta_flutter/shared/constants.dart';
 import 'package:planta_flutter/shared/loading.dart';
 

@@ -35,7 +35,7 @@ class PlantController {
   }
 
   static Future updatePlant(Plant plantDto) async {
-    final http.Response response = await http.put(Variables.API_URL + 'plants/${plantDto.id}',
+    final http.Response response = await http.put(Variables.API_URL + 'plants/${plantDto.uid}',
         headers: <String, String>{'Content-type': 'application/json;charset=UTF-8'}, body: jsonEncode(plantDto));
     if (response.statusCode == 201) {
       return true;

@@ -9,10 +9,10 @@ import 'package:planta_flutter/screens/auth/register.dart';
 import 'package:planta_flutter/screens/auth/logIn.dart';
 import 'package:planta_flutter/screens/wrapper.dart';
 import 'package:planta_flutter/services/auth.dart';
+import 'package:planta_flutter/shared/colors.dart';
 import 'package:provider/provider.dart';
 
 import 'models/User.dart';
-import 'file:///C:/projects/planta_flutter/lib/shared/colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +27,6 @@ Future<void> main() async {
     value: AuthService().user,
     child: MaterialApp(
       home: Wrapper(),
-//        dzialajace elementy
-//    home: PlantHome(),
       initialRoute: '/',
       routes: {
         '/addPlant': (context) => AddPlantRoute(),

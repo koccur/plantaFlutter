@@ -60,9 +60,9 @@ class _PlantHome extends State<PlantHome> {
   }
 
   String getSprayLastActivation(Plant plant) {
-    if (plant.water.spray != null) {
-      return _getFormattedDate(plant.water.spray.lastActivity);
-    }
+//    if (plant.water.spray != null) {
+//      return _getFormattedDate(plant.water.spray.lastActivity);
+//    }
 
     return 'no Data'; //todo: translate
   }

@@ -46,8 +46,7 @@ class _SettingsFormState extends State<SettingsForm> {
                 SizedBox(
                   height: 20.0,
                 ),
-                DropdownButtonFormField(
-                  value: _currentIntensty ?? userData.intensity,
+                DropdownButtonFormField(value: _currentIntensty ?? 0,
                   items: intensities.map((inten) {
                     return DropdownMenuItem(value: inten, child: Text('$inten intensity'));
                   }).toList(),
@@ -58,8 +57,7 @@ class _SettingsFormState extends State<SettingsForm> {
                   child: Text('Update'),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      await DatabaseService(uid: user.uid).updateUserData(_currentName ?? userData.name,
-                          _currentFrequency ?? userData.frequency, _currentIntensty ?? userData.intensity);
+                      await DatabaseService(uid: user.uid).updateUserData(_currentName ?? userData.name);
                     } else {
                       Navigator.pop(context);
                     }

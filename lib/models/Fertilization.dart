@@ -4,7 +4,7 @@ class Fertilization {
   int intensity;
   String lastActivity;
 
-  Fertilization({this.id, this.frequency, this.intensity, this.lastActivity}) {}
+  Fertilization({this.id, this.frequency, this.intensity, this.lastActivity});
 
   factory Fertilization.fromJson(Map<String, dynamic> json) {
     return Fertilization(
