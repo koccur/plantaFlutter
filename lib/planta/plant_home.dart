@@ -66,12 +66,13 @@ class PlantHome2 extends StatelessWidget {
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return SimpleDialog(elevation: 12,
-                contentPadding: EdgeInsets.only(top: 0, bottom: 16),
-                children: <Widget>[
-                  Container(padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                    margin: EdgeInsets.only(bottom: 24),
-                    child: Text(plant.name, style: TextStyle(fontSize: 21),
+            return SimpleDialog(elevation: 12, contentPadding: EdgeInsets.only(top: 0, bottom: 16), children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                margin: EdgeInsets.only(bottom: 24),
+                child: Text(
+                  plant.name,
+                  style: TextStyle(fontSize: 21),
                 ),
                     color: AppColors.ThemeColor,
               ),
@@ -121,8 +122,7 @@ class PlantHome2 extends StatelessWidget {
                   plant.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20),
-                ),
-                Container(margin: EdgeInsets.only(top: 16), padding: EdgeInsets.symmetric(horizontal: 32),
+                ), Container(margin: EdgeInsets.only(top: 16), padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Row(children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
@@ -130,12 +130,10 @@ class PlantHome2 extends StatelessWidget {
                     ),
                     Text(plant.water.lastActivity),
                     IconButton(
-                      icon: new Icon(Icons.cached, color: Colors.black45,
-                      ), onPressed: () => _waterPlant(plant),
+                      icon: new Icon(Icons.cached, color: Colors.black45,), onPressed: () => _waterPlant(plant),
                     )
                   ]),
-                ),
-                Container(alignment: Alignment.center, padding: EdgeInsets.symmetric(horizontal: 32),
+                ), Container(alignment: Alignment.center, padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Row(children: <Widget>[
                     Padding(
                         padding: const EdgeInsets.only(right: 8.0),
@@ -146,8 +144,7 @@ class PlantHome2 extends StatelessWidget {
                         )),
                     Text(plant.fertilization.lastActivity),
                     IconButton(
-                      icon: new Icon(Icons.cached, color: Colors.black38,
-                      ), onPressed: () => _fertilizePlant(plant),
+                      icon: new Icon(Icons.cached, color: Colors.black38,), onPressed: () => _fertilizePlant(plant),
                     )
                   ]),
                 ),
@@ -224,27 +221,18 @@ class PlantHome2 extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: Text('There is empty here', style: TextStyle(fontSize: 20)),
-                margin: EdgeInsets.only(bottom: 16),
-              ),
-              RaisedButton(
-                child: Text('Add your plant :)'),
-                onPressed: () => Navigator.pushNamed(context, '/addPlant'),
-              )
+            children: <Widget>[SizedBox(
+              height: 20,
+              ), Column(children: <Widget>[
+              Text('Add Your first plant :)', style: TextStyle(fontStyle: FontStyle.italic),),
+              IconButton(icon: Icon(Icons.add_circle, color: AppColors.ThemeColor, size: 48),
+                onPressed: () => Navigator.pushNamed(context, '/addPlant'),),
+            ],),
             ],
           ));
     } else {
       return Column(
         children: <Widget>[
-          SizedBox(
-            height: 20,
-          ),
-          RaisedButton(
-            child: Text('Add your plant :)'),
-            onPressed: () => Navigator.pushNamed(context, '/addPlant'),
-          ),
           SizedBox(
             height: 20,
           ),
