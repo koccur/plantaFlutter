@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:planta_flutter/models/Fertilization.dart';
 import 'package:planta_flutter/models/Place.dart';
 import 'package:planta_flutter/models/Plant.dart';
@@ -100,5 +101,20 @@ class PlantService {
         frequency: fert['frequency'], intensity: fert['intensity'], lastActivity: fert['lastActivity'].toString());
   }
 
+  void waterPlant(Plant plant) {
+//    days per week / frequency by week
+    // 7/2=3 next water in 3 days
+    int days = (7 / plant.water.frequency).floor();
+    plant.water.lastActivity =
+        new DateFormat('yyyy-MM-dd').format(DateTime.parse(plant.water.lastActivity).add(new Duration(days: days)));
+    updatePlant(plant);
+  }
 
+  void fertilizePlant(Plant plant) {
+//    days per quarter / frequency by quarter
+    // 90/2=45 next fertalization in 45 days
+    int days = (90 / plant.fertilization.frequency).floor();
+    plant.fertilization.lastActivity = new DateFormat('yyyy-MM-dd')
+        .format(DateTime.parse(plant.fertilization.lastActivity).add(new Duration(days: days)));
+  }
 }

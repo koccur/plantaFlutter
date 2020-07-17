@@ -51,30 +51,41 @@ class PlantHome2 extends StatelessWidget {
       return 'no Data'; //todo: translate
     }
 
-//                  todo move that to showDialogOption
+    void _waterPlant(Plant plant) {
+      plantService.waterPlant(plant);
+      Navigator.of(context).pop();
+    }
+
+    void _fertilizePlant(Plant plant) {
+      plantService.fertilizePlant(plant);
+      Navigator.of(context).pop();
+    }
+
     void _showDeletePlantDialog(context, Plant plant) {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Delete plant'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[Text('Are you sure that you want to delete this plant?')],
+            return SimpleDialog(elevation: 12,
+                contentPadding: EdgeInsets.only(top: 0, bottom: 16),
+                children: <Widget>[
+                  Container(padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    margin: EdgeInsets.only(bottom: 24),
+                    child: Text(plant.name, style: TextStyle(fontSize: 21),
                 ),
+                    color: AppColors.ThemeColor,
               ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancel'),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                FlatButton(
-                  child: Text('Yes'),
-                  onPressed: () => plantService.deletePlant(plant.uid).whenComplete(() => Navigator.of(context).pop()),
-                )
-              ],
-            );
+                  Container(child: Text('Are you sure that you want to delete this plant?'),
+                    margin: EdgeInsets.symmetric(vertical: 20, horizontal: 16),),
+                  Row(mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FlatButton(child: Text('Cancel'), onPressed: () => Navigator.of(context).pop(),),
+                      FlatButton(child: Text('Yes'), onPressed: () {
+                        Navigator.of(context).pop();
+                        plantService.deletePlant(plant.uid);
+                      })
+                    ],)
+                ]);
           });
     }
 
@@ -111,8 +122,7 @@ class PlantHome2 extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 20),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                Container(margin: EdgeInsets.only(top: 16), padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Row(children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(right: 8.0),
@@ -120,16 +130,12 @@ class PlantHome2 extends StatelessWidget {
                     ),
                     Text(plant.water.lastActivity),
                     IconButton(
-                      icon: new Icon(
-                        Icons.check_box,
-                        color: Colors.white,
-                      ),
-                      onPressed: null,
+                      icon: new Icon(Icons.cached, color: Colors.black45,
+                      ), onPressed: () => _waterPlant(plant),
                     )
                   ]),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                Container(alignment: Alignment.center, padding: EdgeInsets.symmetric(horizontal: 32),
                   child: Row(children: <Widget>[
                     Padding(
                         padding: const EdgeInsets.only(right: 8.0),
@@ -140,11 +146,8 @@ class PlantHome2 extends StatelessWidget {
                         )),
                     Text(plant.fertilization.lastActivity),
                     IconButton(
-                      icon: new Icon(
-                        Icons.check_box,
-                        color: Colors.white,
-                      ),
-                      onPressed: null,
+                      icon: new Icon(Icons.cached, color: Colors.black38,
+                      ), onPressed: () => _fertilizePlant(plant),
                     )
                   ]),
                 ),
@@ -210,7 +213,7 @@ class PlantHome2 extends StatelessWidget {
     }
 
     RaisedButton plantButtonFunc(context, Plant plant) {
-      return RaisedButton(onPressed: () => {print('xxx'), _showPlantActionDialog(context, plant)},
+      return RaisedButton(onPressed: () => _showPlantActionDialog(context, plant),
         child: plantBoxFunc(context, plant),
         padding: EdgeInsets.all(10),
       );
