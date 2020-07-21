@@ -56,7 +56,7 @@ class _RegisterState extends State<Register> {
                       TextFormField(
                         decoration: textInputDecoration.copyWith(hintText: 'Email'),
                         validator: (value) => value.isEmpty ? 'Enter an email' : null,
-                        onChanged: (value) => setState(() => email = value),
+                        onChanged: (value) => setState(() => email = value.trimRight()),
                       ),
                       SizedBox(
                         height: 20,
@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
                         obscureText: true,
                         decoration: textInputDecoration.copyWith(hintText: 'Password'),
                         validator: (value) => value.length < 6 ? 'Enter a password with min 6 chars long' : null,
-                        onChanged: (value) => setState(() => password = value),
+                        onChanged: (value) => setState(() => password = value.trimRight()),
                       ),
                       SizedBox(
                         height: 20,

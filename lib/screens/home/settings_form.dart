@@ -15,8 +15,6 @@ class _SettingsFormState extends State<SettingsForm> {
   final List<String> intensities = ['1', '2', '3'];
 
   String _currentName;
-  String _currentIntensty;
-  int _currentFrequency;
 
   @override
   Widget build(BuildContext context) {
@@ -46,31 +44,16 @@ class _SettingsFormState extends State<SettingsForm> {
                 SizedBox(
                   height: 20.0,
                 ),
-                DropdownButtonFormField(value: _currentIntensty ?? 0,
-                  items: intensities.map((inten) {
-                    return DropdownMenuItem(value: inten, child: Text('$inten intensity'));
-                  }).toList(),
-                  onChanged: (value) => setState(() => _currentIntensty = value),
-                ),
-                RaisedButton(
-                  color: Colors.pink[400],
+                RaisedButton(color: Colors.deepOrange[400],
                   child: Text('Update'),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      await DatabaseService(uid: user.uid).updateUserData(_currentName ?? userData.name);
+                      await DatabaseService(uid: user.uid).updateUserName(_currentName ?? userData.name);
                     } else {
                       Navigator.pop(context);
                     }
                   },
                 ),
-                Slider(
-                  value: (_currentFrequency ?? 100).toDouble(),
-                  activeColor: Colors.blue[_currentFrequency ?? 100],
-                  min: 100,
-                  max: 900,
-                  divisions: 8,
-                  onChanged: (value) => setState(() => _currentFrequency = value.round()),
-                )
               ]),
             );
           } else {
