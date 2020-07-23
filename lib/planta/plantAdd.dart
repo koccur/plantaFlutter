@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -34,15 +35,18 @@ class _AddPlantRoute extends State<AddPlantRoute> {
               Navigator.pop(context);
             }),
         title: new Center(child: new Text('Plantmagedon', textAlign: TextAlign.center)),
-        actions: <Widget>[IconButton(icon: Icon(Icons.check), onPressed: () async {
-          if (_formKey.currentState.validate()) {
-            if (_plant.uid != null) {
-              await plantService.updatePlant(_plant).whenComplete(() => Navigator.pop(context));
-            } else {
-              await plantService.createPlant(_plant).whenComplete(() => Navigator.pop(context));
-            }
-          }
-        }),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () async {
+                if (_formKey.currentState.validate()) {
+                  if (_plant.uid != null) {
+                    await plantService.updatePlant(_plant).whenComplete(() => Navigator.pop(context));
+                  } else {
+                    await plantService.createPlant(_plant).whenComplete(() => Navigator.pop(context));
+                  }
+                }
+              }),
         ]);
   }
 
@@ -54,16 +58,20 @@ class _AddPlantRoute extends State<AddPlantRoute> {
             height: 130.0,
             decoration: new BoxDecoration(
                 color: Colors.white, border: new Border.all(width: 5, color: AppColors.ThemeColor)),
-                child: FlatButton(
-                  onPressed: () => waitForPhoto(),
-                  padding: EdgeInsets.all(0.0), child: _getImage(_plant.picture),))));
+                child: FlatButton(onPressed: () =>
+                    waitForPhoto().whenComplete(() {
+                      setState(() {
+                        imageCache.clear();
+                        imageCache.clearLiveImages();
+                      });
+                    }), padding: EdgeInsets.all(0.0), child: _getImage(_plant.picture),))));
   }
 
   _getImage(String path) {
     if (path == null) {
       return SvgPicture.asset('images/icons/plant-temp.svg');
     } else {
-      return Image.file(File(path));
+      return Image.file(File(path), key: ValueKey(new Random().nextInt(100)), fit: BoxFit.cover,);
     }
   }
 
@@ -161,7 +169,8 @@ class _AddPlantRoute extends State<AddPlantRoute> {
   Future<Null> _selectDate(BuildContext context, DateTime time, bool isWater) async {
     final DateTime date = await showDatePicker(context: context,
         initialDate: time != null ? time : new DateTime.now(),
-        firstDate: DateTime(2020, 1), lastDate: new DateTime.now());
+        firstDate: DateTime(2020, 1),
+        lastDate: new DateTime.now());
     if (date != null && date != time) {
       setState(() {
         if (isWater) {
@@ -253,10 +262,6 @@ class _AddPlantRoute extends State<AddPlantRoute> {
 
       checkboxWaterValue = _plant.water.lastActivity != '';
       checkboxFertValue = _plant.fertilization.lastActivity != '';
-    }
-    if (ModalRoute.of(context).settings.arguments.runtimeType == String &&
-        ModalRoute.of(context).settings.arguments.toString().contains('png')) {
-      _plant.picture = ModalRoute.of(context).settings.arguments;
     }
   }
 
