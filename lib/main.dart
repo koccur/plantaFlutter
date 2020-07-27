@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:planta_flutter/controllers/Camera.controller.dart';
 import 'package:planta_flutter/planta/plantAdd.dart';
 import 'package:planta_flutter/screens/auth/register.dart';
@@ -23,19 +24,21 @@ Future<void> main() async {
   // Get a specific camera from the list of available cameras.
   final firstCamera = cameras.first;
 
-  runApp(StreamProvider<User>.value(
-    value: AuthService().user,
-    child: MaterialApp(
-      home: Wrapper(),
-      initialRoute: '/',
-      routes: {
-        '/addPlant': (context) => AddPlantRoute(),
-        '/register': (context) => Register(),
-        '/login': (context) => LogIn(),
-        '/takePhoto': (context) => TakePictureScreen(camera: firstCamera)
-      },
-      title: 'Plantmagedon',
-      theme: ThemeData(primaryColor: AppColors.ThemeColor),
-    ),
-  ));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) => {
+        runApp(StreamProvider<User>.value(
+          value: AuthService().user,
+          child: MaterialApp(
+            home: Wrapper(),
+            initialRoute: '/',
+            routes: {
+              '/addPlant': (context) => AddPlantRoute(),
+              '/register': (context) => Register(),
+              '/login': (context) => LogIn(),
+              '/takePhoto': (context) => TakePictureScreen(camera: firstCamera)
+            },
+            title: 'Plantmagedon',
+            theme: ThemeData(primaryColor: AppColors.ThemeColor, fontFamily: "Monserrat"),
+          ),
+        ))
+      });
 }

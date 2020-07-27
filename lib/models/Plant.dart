@@ -14,7 +14,8 @@ class Plant {
   Plant({this.uid, this.name, this.picture, this.water, this.fertilization, this.place, this.notes});
 
   factory Plant.fromJson(Map<String, dynamic> json) {
-    return Plant(uid: json['uid'],
+    return Plant(
+        uid: json['uid'],
         name: json['name'],
         picture: json['picture'],
         water: Water.fromJson(json['water']),
@@ -23,7 +24,8 @@ class Plant {
         notes: json['notes']);
   }
 
-  Map<String, dynamic> toJson() => {"uid": uid,
+  Map<String, dynamic> toJson() => {
+        "uid": uid,
         "name": name,
         "picture": picture,
         "water": water,
@@ -45,4 +47,3 @@ class PlantList {
     return new PlantList(plants: plants);
   }
 }
-

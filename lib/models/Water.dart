@@ -1,4 +1,3 @@
-
 class Water {
   int id;
   int frequency;
@@ -10,9 +9,7 @@ class Water {
 
   factory Water.fromJson(Map<String, dynamic> json) {
     return Water(
-        id: json['id'],
-        frequency: json['frequency'],
-        intensity: json['intensity'], lastActivity: json['lastActivity']);
+        id: json['id'], frequency: json['frequency'], intensity: json['intensity'], lastActivity: json['lastActivity']);
   }
 
   Map<String, dynamic> toJson() =>

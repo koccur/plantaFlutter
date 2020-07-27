@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
@@ -54,15 +55,20 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     // Fill this out in the next steps.
     _plant = ModalRoute.of(context).settings.arguments;
 
-    return Scaffold(appBar: AppBar(title: Text('Take a picture of your plant')),
-      body: FutureBuilder<void>(future: _initializeControllerFuture, builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return CameraPreview(_controller);
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.camera_alt), // Provide an onPressed callback.
+    return Scaffold(
+      appBar: AppBar(title: Text('Take a picture of your plant')),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(_controller);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.camera_alt), // Provide an onPressed callback.
         onPressed: () async {
           // Take the Picture in a try / catch block. If anything goes wrong,
           // catch the error.
@@ -72,12 +78,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             // Construct the path where the image should be saved using the
             // pattern package.
-            final path = join( // Store the picture in the temp directory.
-              // Find the temp directory using the `path_provider` plugin.
-              (await getTemporaryDirectory()).path, '${DateTime.now()}.png',);
-
+            final directory = await getApplicationDocumentsDirectory();
+            final path = join(directory.path, _plant.uid != null ? '${_plant.uid}.png' : 'tempId.png',);
+            File file = File(path);
             // Attempt to take a picture and log where it's been saved.
-            await _controller.takePicture(path);
+            await (file.delete()).whenComplete(() {
+              _controller.takePicture(path);
+              _uploadPhotoViaFireBase(path);
+            });
 
 //            // If the picture was taken, display it on a new screen.
 //            Navigator.push(
@@ -85,17 +93,34 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 //              MaterialPageRoute(
 //                builder: (context) => DisplayPictureScreen(imagePath: path),
 //              ),
-//            just pop with image
-            setState(() {
-              _plant.picture = path;
-            });
 //            Navigator.of(context).pop(true);
-            Navigator.pop(context, true);
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
           }
         },),);
+  }
+
+  Future _uploadPhotoViaFireBase(String temporaryPath) async {
+    if (_plant.uid != null) {
+      final path = '${_plant.uid}.png';
+      StorageReference storageReference = FirebaseStorage.instance.ref().child(path);
+
+      File file = File(temporaryPath);
+      StorageUploadTask uploadTask = storageReference.putFile(file);
+      await uploadTask.onComplete;
+      print('File uploaded');
+      storageReference.getDownloadURL().then((url) => setStateAndPop(temporaryPath));
+    } else {
+      setStateAndPop(temporaryPath);
+    }
+  }
+
+  void setStateAndPop(String path) {
+    setState(() {
+      _plant.picture = path;
+      Navigator.pop(context, true);
+    });
   }
 }
 
